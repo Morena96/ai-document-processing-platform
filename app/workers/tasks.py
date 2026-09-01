@@ -29,7 +29,7 @@ async def _process(document_id: str) -> None:
             )
             document.result = extracted.model_dump(mode="json")
             document.status = DocumentStatus.completed
-        except Exception as exc:  # worker boundary: persist failures for retry/inspection
+        except Exception as exc:  # noqa: BLE001 - worker boundary must persist unexpected failures
             document.status = DocumentStatus.failed
             document.error = str(exc)[:1000]
         await db.commit()
